@@ -131,6 +131,8 @@
 (global-set-key (kbd "C-c C-g") 'counsel-mark-ring)
 (global-set-key (kbd "\C-xg") 'counsel-bookmark)
 
+(global-set-key (kbd "C-x C-t") 'git-timemachine)
+
 ;; avy go to anywhere 
 (global-set-key (kbd "C-'") 'avy-goto-line)
 ;;(global-set-key (kbd "C-;") 'avy-goto-char)
@@ -189,7 +191,7 @@ if we are not in a project, just use the function counsel-ag"
 	     (swiper))
 	  (counsel-rg)))
     (counsel-projectile-rg)))
-(define-key projectile-mode-map [?\s-g] 'mydef-enhanced-counsel-search)
+(define-key projectile-mode-map [?\s-e] 'mydef-enhanced-counsel-search)
 
 (require 'init-user-funs)
 (defun mydef-enhanced-find-file ()
@@ -241,8 +243,10 @@ if we are not in a project, just use the function find-file"
 (global-set-key (kbd "s-2") 'split-window-below)
 (global-set-key (kbd "s-3") 'split-window-right)
 (global-set-key (kbd "s-e") 'nil)
-(global-set-key (kbd "s-n") 'nil)
 (global-set-key (kbd "s-m") 'nil)
 (global-set-key (kbd "C-z") 'nil)
+(global-set-key (kbd "s-w") 'kill-ring-save)
+(global-set-key (kbd "s-p") 'backward-paragraph)
+(global-set-key (kbd "s-n") 'forward-paragraph)
 
 (provide 'init-keybindings)

@@ -18,6 +18,9 @@
 (unless (display-graphic-p)
   ;;(load-theme 'spacemacs-dark t)
   (load-theme 'sanityinc-tomorrow-eighties t))
+(load-theme 'sanityinc-tomorrow-eighties t)
+
+(set-face-attribute 'fringe nil :background nil)
 
 (setq truncate-lines nil)
 (setq truncate-partial-width-Win nil)
@@ -52,7 +55,7 @@
 
 
 ;; highlight current line
-;; (global-hl-line-mode +1)
+(global-hl-line-mode +1)
 ;;(set-face-background 'hl-line "grey9")
 ;; (unless (display-graphic-p)
 ;;   (global-hl-line-mode +1)
@@ -101,6 +104,8 @@
     auto-revert-mode
     buffer-face-mode
     highlight-indentation-mode
+    flyspell-mode
+    flymake-mode
     ))
 
 (defun purge-minor-modes ()
@@ -115,6 +120,7 @@
 (dim-major-name 'emacs-lisp-mode "L")
 (dim-major-name 'inferior-python-mode "iPy")
 (dim-major-name 'python-mode "Py")
+(dim-major-name 'elpy-mode "Py")
 
 ;; set default font for different OS type
 (setq Win-English-font "-outline-Inconsolata-normal-normal-normal-mono-19-*-*-*-c-*-fontset-auto8")
@@ -123,7 +129,7 @@
 (setq Win-smaller-fontsize 100)
 (setq Mac-English-font "-*-Menlo-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 (setq Mac-Chinese-font "-*-Hiragino Sans GB-normal-normal-normal-*-*-*-*-*-p-0-iso10646-1")
-(setq Mac-fontsize 16)
+(setq Mac-fontsize 14)
 (setq Mac-smaller-fontsize 125)
 ;; check OS type
 (cond

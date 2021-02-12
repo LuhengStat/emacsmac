@@ -5,7 +5,10 @@
 
 (add-hook 'inferior-python-mode-hook 'visual-line-mode)
 ;; (setq ispell-program-name "/usr/local/Cellar/aspell/0.60.8/bin/aspell")
-(add-hook 'elpy-mode-hook 'flycheck-mode)
+(add-hook 'elpy-mode-hook 'flymake-mode)
+;; (add-hook 'elpy-mode-hook 'flycheck-mode)
+;; (with-eval-after-load 'flycheck
+;;   (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
 
 (defun mydef-RET ()
   "define RET behavior in python"
@@ -18,6 +21,36 @@
 
 (define-key elpy-mode-map (kbd "C-c C-c") 'elpy-shell-send-group-and-step)
 (define-key elpy-mode-map (kbd "C-c C-l") 'elpy-shell-send-region-or-buffer)
+(global-set-key (kbd "s-.") 'xref-find-definitions-other-window)
+
+;; An alternative to elpy-goto-definition
+(defun elpy-goto-definition-or-rgrep ()
+  "Go to the definition of the symbol at point, if found. Otherwise, run `elpy-rgrep-symbol'."
+    (interactive)
+    (ring-insert find-tag-marker-ring (point-marker))
+    (condition-case nil (elpy-goto-definition)
+        (error (elpy-rgrep-symbol
+		(concat "\\(def\\|class\\)\s" (thing-at-point 'symbol) "(")))))
+(define-key elpy-mode-map (kbd "M-.") 'elpy-goto-definition-or-rgrep)
+
+;; Enable full font locking of inputs in the python shell
+(advice-add 'elpy-shell--insert-and-font-lock
+            :around (lambda (f string face &optional no-font-lock)
+                      (if (not (eq face 'comint-highlight-input))
+                          (funcall f string face no-font-lock)
+                        (funcall f string face t)
+                        (python-shell-font-lock-post-command-hook))))
+(advice-add 'comint-send-input
+            :around (lambda (f &rest args)
+                      (if (eq major-mode 'inferior-python-mode)
+                          (cl-letf ((g (symbol-function 'add-text-properties))
+                                    ((symbol-function 'add-text-properties)
+                                     (lambda (start end properties &optional object)
+                                       (unless (eq (nth 3 properties) 'comint-highlight-input)
+                                         (funcall g start end properties object)))))
+                            (apply f args))
+                        (apply f args))))
+
 
 (defun mydef-eval-line ()
   "eval line and step"

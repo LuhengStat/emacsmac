@@ -58,7 +58,7 @@
 		     smart-mode-line
 		     flyspell-correct-popup
 		     graphviz-dot-mode
-		     company-tabnine
+		     ;; company-tabnine
 		     ))
 
 ;; activate all the packages (in particular autoloads)
@@ -132,9 +132,9 @@
 		  (cons 'company-yasnippet
 			(car company-backends))))))
 
-(add-to-list 'company-backends #'company-tabnine)
+;;(add-to-list 'company-backends #'company-tabnine)
 (setq company-idle-delay 0)
-(setq company-show-numbers t) 
+(setq company-show-numbers t)
 (company-tng-configure-default)
 (setq company-frontends
       '(company-tng-frontend

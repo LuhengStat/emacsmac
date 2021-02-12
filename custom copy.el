@@ -25,6 +25,7 @@
      (ess-R-fl-keyword:F&T . t)
      (ess-R-fl-keyword:%op% . t))))
  '(fancy-splash-image "image.jpg")
+ '(fringe-mode (quote (nil . 0)) nil (fringe))
  '(package-selected-packages
    (quote
     (magit ztree youdao-dictionary use-package transpose-frame spacemacs-theme smart-mode-line rg py-autopep8 popwin markdown-mode iedit hungry-delete highlight-parentheses graphviz-dot-mode git-timemachine expand-region exec-path-from-shell evil elpy dim counsel-projectile company-tabnine company-auctex color-theme-sanityinc-tomorrow cal-china-x browse-kill-ring autopair auto-complete-auctex ag ace-window)))
