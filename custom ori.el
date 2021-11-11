@@ -49,7 +49,7 @@
      ("\\?\\?\\?+" . "#dc752f"))))
  '(package-selected-packages
    (quote
-    (magit ztree youdao-dictionary use-package transpose-frame spacemacs-theme smart-mode-line rg py-autopep8 popwin markdown-mode iedit hungry-delete highlight-parentheses graphviz-dot-mode git-timemachine expand-region exec-path-from-shell evil elpy dim counsel-projectile company-tabnine company-auctex color-theme-sanityinc-tomorrow cal-china-x browse-kill-ring autopair auto-complete-auctex ag ace-window)))
+    (magit ztree youdao-dictionary use-package transpose-frame spacemacs-theme smart-mode-line rg py-autopep8 popwin markdown-mode iedit hungry-delete highlight-parentheses graphviz-dot-mode git-timemachine expand-region exec-path-from-shell evil elpy dim counsel-projectile company-auctex color-theme-sanityinc-tomorrow cal-china-x browse-kill-ring autopair auto-complete-auctex ag ace-window)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
  '(projectile-mode-line-prefix " Proj")
  '(scroll-bar-mode nil)

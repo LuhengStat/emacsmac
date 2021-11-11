@@ -8,7 +8,7 @@
   ;; set cursor-type with a line
   ;;(setq-default cursor-type 'bar)
   ;; set cursor color
-  (set-cursor-color "#3180f1")
+  ;;(set-cursor-color "#3180f1")
   )
 (if window-system
     (s-cursor))
@@ -17,8 +17,9 @@
   (menu-bar-mode -1))
 (unless (display-graphic-p)
   ;;(load-theme 'spacemacs-dark t)
-  (load-theme 'sanityinc-tomorrow-eighties t))
-(load-theme 'sanityinc-tomorrow-eighties t)
+  ;;(load-theme 'sanityinc-tomorrow-eighties t)
+  )
+;;(load-theme 'sanityinc-tomorrow-eighties t)
 
 (set-face-attribute 'fringe nil :background nil)
 
@@ -29,12 +30,12 @@
 ;; line-spacing
 (setq-default line-spacing 5)
 (sml/setup)
-(custom-set-faces
- '(mode-line ((t (:background "#c6c4da" :foreground "black" :box (:line-width -1 :style released-button)))))
- '(mode-line-inactive ((t (:inherit mode-line :background "grey56" :foreground "grey20" :box (:line-width -1 :color "grey75") :weight light)))))
-(setq modelinesize 115)
-(set-face-attribute 'mode-line nil :height modelinesize)
-(set-face-attribute 'mode-line-inactive nil  :height modelinesize)
+;; (custom-set-faces
+;;  '(mode-line ((t (:background "#c6c4da" :foreground "black" :box (:line-width -1 :style released-button)))))
+;;  '(mode-line-inactive ((t (:inherit mode-line :background "grey56" :foreground "grey20" :box (:line-width -1 :color "grey75") :weight light)))))
+;; (setq modelinesize 115)
+;; (set-face-attribute 'mode-line nil :height modelinesize)
+;; (set-face-attribute 'mode-line-inactive nil  :height modelinesize)
 (toggle-frame-maximized)
 
 (show-paren-mode 1)

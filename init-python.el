@@ -1,6 +1,9 @@
 
 (elpy-enable)
 
+;; (setq python-python-command "/opt/anaconda3/bin/python")
+;; (setq elpy-rpc-python-command "/opt/anaconda3/bin/python")
+
 (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
 
 (add-hook 'inferior-python-mode-hook 'visual-line-mode)
@@ -31,7 +34,7 @@
     (condition-case nil (elpy-goto-definition)
         (error (elpy-rgrep-symbol
 		(concat "\\(def\\|class\\)\s" (thing-at-point 'symbol) "(")))))
-(define-key elpy-mode-map (kbd "M-.") 'elpy-goto-definition-or-rgrep)
+(define-key elpy-mode-map (kbd "M-.") 'xref-find-definitions)
 
 ;; Enable full font locking of inputs in the python shell
 (advice-add 'elpy-shell--insert-and-font-lock
