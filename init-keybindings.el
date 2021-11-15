@@ -248,5 +248,6 @@ if we are not in a project, just use the function find-file"
 (global-set-key (kbd "s-w") 'kill-ring-save)
 (global-set-key (kbd "s-p") 'backward-paragraph)
 (global-set-key (kbd "s-n") 'forward-paragraph)
+(global-set-key (kbd "s-t") 'git-timemachine)
 
 (provide 'init-keybindings)

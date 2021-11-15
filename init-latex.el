@@ -2,61 +2,25 @@
 ;;(require 'auto-complete-auctex)
 (require 'company-auctex)
 (company-auctex-init)
+(load "~/.emacs.d/myini/cdlatex.el")
+(add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
 
-
-;; for the \left \right part 
-(add-hook 'latex-mode-hook
-          (lambda ()
-	    (autopair-mode -1)))
+;; ACUTeX replaces latex-mode-hook with LaTeX-mode-hook
 (add-hook 'LaTeX-mode-hook
-          (lambda ()
-	    (autopair-mode -1)))
-(setq-default LaTeX-electric-left-right-brace t)
+(lambda ()
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq-default TeX-master nil)
+(reftex-mode t)
+(TeX-fold-mode t)))
 
-
-;; two dollars in one time
-(defun brf-TeX-Inserting (sta stb stc num)
-  " after entering stb insert stc and go back with the cursor by num positions.
-    With prefix nothings gets replaced. If the previous char was sta nothing will be 
-    replaces as well." 
-  (if (null current-prefix-arg)
-      (progn
-        (if (= (preceding-char) sta )
-            (insert stb)
-          (progn (insert stc) (backward-char num))))
-    (insert stb)))
-
-(defun brf-TeX-dollarm () (interactive) (brf-TeX-Inserting ?\\ "$"  "$$" 1))
-(add-hook 'LaTeX-mode-hook
-   (function (lambda ()
-	       (local-set-key (kbd "$") 'brf-TeX-dollarm))))
-
-
-
-;; Only change sectioning colour
-;;(setq font-latex-fontify-sectioning 'color)
-
-;; super-/sub-script on baseline
-(setq font-latex-script-display (quote (nil)))
-;; Do not change super-/sub-script font
-(custom-set-faces
- '(font-latex-subscript-face ((t nil)))
- '(font-latex-superscript-face ((t nil)))
- )
-
-;; Exclude bold/italic from keywords, can be customized
-;;(setq font-latex-deactivated-keyword-classes
-;;      '("italic-command" "bold-command" "italic-declaration" "bold-declaration"))
-
+;; do not promot for the reference <2018-01-23 Tue> 
+;;(setq reftex-ref-macro-prompt nil)
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
 
 (setq-default TeX-parse-self t) ;; Enable parsing of the file itself on load
 (setq-default TeX-auto-save t) ;; Enable save on command executation (e.g., LaTeX)
 (setq-default TeX-save-query nil) ;; Don't even ask about it
-
-;; latex options
-(setq-default TeX-command-extra-options "-shell-escape") ;; Enable shell escape option by default
-
-;; Synctex for windows
 (setq-default TeX-source-correlate-mode t) ;; Enable synctex
 (setq-default TeX-source-correlate-start-server t)
 
@@ -64,37 +28,6 @@
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 ;; Activate nice interface between RefTeX and AUCTeX
 (setq reftex-plug-into-AUCTeX t)
-;; set a cite type
-;;(setq reftex-cite-format 'natbib)
-
- 	
-(setq-default TeX-master nil) ; Query for master file.
-;; do not promot for the reference <2018-01-23 Tue> 
-(setq reftex-ref-macro-prompt nil)
-
-
-(setq font-latex-match-reference-keywords
-  '(
-    ("citeauthor" "[{")
-    ("Citeauthor" "[{")
-    ("cians" "[{")
-    ("citet" "[{")
-    ("citep" "[{")
-    ))
-
-
-;; AucTeX
-(add-hook 'LaTeX-mode-hook 'visual-line-mode)
-;;(add-hook 'LaTeX-mode-hook (lambda () (setq truncate-lines t)))
-(setq ispell-program-name "/usr/local/bin/aspell")
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
-;;(require 'flyspell-correct-ivy)
-(require 'flyspell-correct-popup)
-(define-key flyspell-mode-map (kbd "C-c <tab>") 'flyspell-correct-previous-word-generic)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-(setq reftex-plug-into-AUCTeX t)
-(setq TeX-PDF-mode t)
-
 
 ;; use Skim as default pdf viewer
 ;; Skim's displayline is used for forward search (from .tex to .pdf)
@@ -103,7 +36,6 @@
 (setq TeX-view-program-list
       '(("PDF Viewer"
 	 "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b")))
-
 
 ;; set the face of the toc 
 (defface mydef-reftex-section-heading-face
@@ -179,9 +111,6 @@ true or not"
 	    (define-key reftex-mode-map (kbd "C-c =") 'mydef-reftex-toc)
 	    (define-key reftex-mode-map (kbd "C-c -") 'mydef-reftex-toc-recenter)
 	    ))
-
-
-
 
 (provide 'init-latex)
 
