@@ -1,6 +1,6 @@
 
-(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+(setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
+                         ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
 
 ;; (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
 ;;                          ("marmalade" . "https://marmalade-repo.org/packages/")
@@ -62,7 +62,7 @@
 		     ))
 
 ;; activate all the packages (in particular autoloads)
-(package-initialize)
+;;(package-initialize)
 
 ;; fetch the list of packages available 
 (unless package-archive-contents
