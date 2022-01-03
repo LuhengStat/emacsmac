@@ -8,7 +8,7 @@
   ;; set cursor-type with a line
   ;;(setq-default cursor-type 'bar)
   ;; set cursor color
-  ;;(set-cursor-color "#3180f1")
+  (set-cursor-color "#3180f1")
   )
 (if window-system
     (s-cursor))
@@ -184,6 +184,14 @@
   (buffer-face-mode))
 (add-hook 'inferior-python-mode-hook 'my-buffer-face-mode-smaller)
 (add-hook 'inferior-ess-mode-hook 'my-buffer-face-mode-smaller)
+
+(defun ui-latex-mode ()
+  "font in the inferiror python or ess mode"
+  (interactive)
+  (setq buffer-face-mode-face '(:height 160))
+  (buffer-face-mode))
+(add-hook 'LaTeX-mode-hook 'ui-latex-mode)
+
 
 ;;;; Set env of edit
 (setq locale-coding-system 'utf-8)

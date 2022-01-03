@@ -1,15 +1,14 @@
 
-;;(server-start)
+(server-start)
 (setq ring-bell-function 'ignore)
 ;; change all prompts to y or n
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; save the window layout
 (winner-mode 1)
+(delete-selection-mode 1)
 ;;(desktop-save-mode 1)
 ;; remember cursor position, for emacs 25.1 or later
 (save-place-mode 1)
-
-(setq default-directory "/Users/wlh/Documents")
 
 ;; automatically focus on the new window
 (add-to-list 'display-buffer-alist
@@ -34,14 +33,12 @@
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-auto-cleanup 'never) ;; in case if use Tramp
-(setq recentf-max-saved-items 50)
+(setq recentf-max-saved-items 200)
 ;; open recent files when satart up
 ;;(recentf-open-files)
 (add-to-list 'recentf-exclude "~/.emacs.d/bookmarks")
 (add-to-list 'recentf-exclude "\\.rip\\'")
 (add-to-list 'recentf-exclude "\\.gz\\'")
-(add-to-list 'recentf-exclude "/Users/wlh/Documents/GitHub/emacsfile")
-(add-to-list 'recentf-exclude "/Users/wlh/Documents/Personal/phd/毕业论文/bak")
 (add-to-list 'recentf-exclude "\\.lof\\'")
 (add-to-list 'recentf-exclude "\\.log\\'")
 (add-to-list 'recentf-exclude "\\.sty\\'")
@@ -74,10 +71,10 @@ If the new path's directories does not exist, create them."
       emacs-tmp-dir)
 
 
-(setq-default abbrev-mode t)
+(setq-default abbrev-mode nil)
 (define-abbrev-table 'global-abbrev-table '(
 					    ;; name
-					    ("wlh" "Luheng Wang")
+					    ;; ("wlh" "Luheng Wang")
 					    ;; my address
 					    ("myadd" "10 Vairo Village, State College.")
 					    ;; work address
@@ -87,7 +84,6 @@ If the new path's directories does not exist, create them."
 					    ;; my email address
 					    ("mygmail" "wlh0426@gmail.com")
 					    ))
-
 
 
 ;; set better mouse scroll type
@@ -120,24 +116,6 @@ If the new path's directories does not exist, create them."
   (global-auto-mark-mode 1))
 
 
-;; disable mouse in emacs
-(define-minor-mode disable-mouse-mode
-  "A minor-mode that disables all mouse keybinds."
-  :global t
-  :lighter "mouse"
-  :keymap (make-sparse-keymap))
-
-(dolist (type '(mouse down-mouse drag-mouse
-                      double-mouse triple-mouse))
-  (dolist (prefix '("" C- M- S- M-S- C-M- C-S- C-M-S-))
-    ;; Yes, I actually HAD to go up to 7 here.
-    (dotimes (n 7)
-      (let ((k (format "%s%s-%s" prefix type n)))
-        (define-key disable-mouse-mode-map
-          (vector (intern k)) #'ignore)))))
-
-(disable-mouse-mode 1)
-
 (remove-hook 'text-mode-hook #'turn-on-auto-fill)
 (add-hook 'text-mode-hook #'visual-line-mode)
 
@@ -148,5 +126,12 @@ If the new path's directories does not exist, create them."
     (let ((dir (file-name-directory filename)))
       (unless (file-exists-p dir)
         (make-directory dir)))))
+
+(when
+    (eq system-type 'windows-nt)
+  (setq gc-cons-threshold (* 512 1024 1024))
+  (setq gc-cons-percentage 0.5)
+  (run-with-idle-timer 5 t #'garbage-collect) 
+  (setq garbage-collection-messages nil) )
 
 (provide 'init-better-defaults)

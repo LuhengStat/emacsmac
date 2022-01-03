@@ -10,56 +10,56 @@
 
 ;; list the packages you want
 (setq package-list '(use-package
-		     auto-complete
-		     highlight-parentheses
-		     ;;neotree
-		     ;;treemacs
-		     ;;treemacs-projectile
-		     swiper
-		     counsel
-		     ivy
-		     autopair
-		     avy
-		     undo-tree
-		     ;;window-numbering
-		     yasnippet
-		     ;;org-ac
-		     browse-kill-ring
-		     youdao-dictionary
-		     ;;ess-view
-		     ;;ess-R-data-view
-		     ;;ess-R-object-popup
-		     transpose-frame
-		     iedit
-		     auto-complete-auctex
-		     expand-region
-		     ;;find-file-in-project
-		     evil
-		     elpy
-		     magit
-		     flycheck
-		     exec-path-from-shell
-		     py-autopep8
-		     ;;cnfonts
-		     spacemacs-theme
-		     company
-		     company-auctex
-		     projectile
-		     counsel-projectile
-		     popwin
-		     ag
-		     rg
-		     cal-china-x
-		     ace-window
-		     dim
-		     hungry-delete
-		     ztree
-		     git-timemachine
-		     smart-mode-line
-		     flyspell-correct-popup
-		     graphviz-dot-mode
-		     ;; company-tabnine
-		     ))
+		      auto-complete
+		      highlight-parentheses
+		      ;;neotree
+		      ;;treemacs
+		      ;;treemacs-projectile
+		      swiper
+		      counsel
+		      ivy
+		      autopair
+		      avy
+		      undo-tree
+		      ;;window-numbering
+		      yasnippet
+		      ;;org-ac
+		      browse-kill-ring
+		      youdao-dictionary
+		      ;;ess-view
+		      ;;ess-R-data-view
+		      ;;ess-R-object-popup
+		      transpose-frame
+		      iedit
+		      auto-complete-auctex
+		      expand-region
+		      ;;find-file-in-project
+		      evil
+		      elpy
+		      magit
+		      flycheck
+		      exec-path-from-shell
+		      py-autopep8
+		      ;;cnfonts
+		      spacemacs-theme
+		      company
+		      company-auctex
+		      projectile
+		      counsel-projectile
+		      popwin
+		      ag
+		      rg
+		      cal-china-x
+		      ace-window
+		      dim
+		      hungry-delete
+		      ztree
+		      git-timemachine
+		      smart-mode-line
+		      flyspell-correct-popup
+		      graphviz-dot-mode
+		      ;;company-tabnine
+		      ))
 
 ;; activate all the packages (in particular autoloads)
 ;;(package-initialize)
@@ -77,86 +77,177 @@
 (eval-when-compile
   (require 'use-package))
 
-;;;;;;;;;;;;;;;;; swiper
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-;;(setq enable-recursive-minibuffers t)
-;;cycle past the last and the first candidates respectively
-(setq ivy-wrap t)
-;; fuzzy settings for ivy https://oremacs.com/2016/01/06/ivy-flx/
-;; do not use "^" for the ivy-M-x
-(setq ivy-initial-inputs-alist nil)
-(setq ivy-count-format "(%d/%d) ")
-
-;;(require 'find-file-in-project)
-;;(setq projectile-completion-system 'ivy)
-;;(setq ffip-prune-patterns (delete "*.pdf" ffip-prune-patterns))
-
-(projectile-mode)
-(counsel-projectile-mode 1)
-;; using the local .projectile file for the file settings
-(setq projectile-indexing-method 'native)
-(setq projectile-enable-caching t)
-(setq projectile-completion-system 'ivy)
-(setq projectile-mode-line-function '(lambda ()
-				       (format " P[%s]" (projectile-project-name))))
-
-
-;; company-mode 
-(global-company-mode)
-(define-key company-active-map (kbd "C-h") 'company-show-doc-buffer)
-(define-key company-active-map (kbd "C-n") 'company-select-next) 
-(define-key company-active-map (kbd "C-p") 'company-select-previous)
-(define-key company-active-map [tab] 'company-complete-common)
-;;(define-key company-active-map (kbd "<C-tab>") 'company-select-previous)
-(setq company-selection-wrap-around t
-      company-tooltip-align-annotations t
-      company-minimum-prefix-length 2
-      company-tooltip-limit 9
-      company-show-numbers nil)
-
-;; add yasnippet support
-(add-to-list 'company-backends 'company-dabbrev-code)
-(add-hook 'elpy-mode-hook
-          (lambda ()
-            (set (make-local-variable 'company-backends)
-                 (append company-backends '(company-yasnippet)))))
-;; (add-hook 'ess-mode-hook
-;; 	  (lambda ()
-;; 	    (set (make-local-variable 'company-backends)
-;; 		 (append company-backends '(company-yasnippet company-dabbrev-code)))))
-(add-hook 'LaTeX-mode-hook
-	  (lambda ()
-	    (set (make-local-variable 'company-backends)
-		 (list
-		  (cons 'company-yasnippet
-			(car company-backends))))))
-
-;;(add-to-list 'company-backends #'company-tabnine)
-(setq company-idle-delay 0)
-(setq company-show-numbers t)
-(company-tng-configure-default)
-(setq company-frontends
-      '(company-tng-frontend
-	company-pseudo-tooltip-frontend
-	company-echo-metadata-frontend))
-
-
-;; ag highlight
-(setq ag-highlight-search t)
-
-;; autocomplete the parenthesis
-(require 'autopair)
-(autopair-global-mode 1)
-
-(require 'avy)
 (require 'counsel)
+(use-package ivy-mode
+  :commands ivy-mode
+  :init
+  (setq ivy-use-virtual-buffers t
+	ivy-wrap t
+	ivy-initial-inputs-alist nil
+	ivy-count-format "(%d/%d) ")
+  ;; set for the swiper
+  (defun mydef-push-mark-swiper ()
+    "push a mark to add the current position to the mark ring"
+    (interactive)
+    (push-mark)
+    (swiper))
+  :bind
+  ("\C-s" . swiper)
+  ("C-c C-r" . ivy-resume)
+  ("<f6>" . ivy-resume)
+  ("C-x C-b" . ivy-switch-buffer)
+  ("M-x" . counsel-M-x)
+  ("\C-xf" . counsel-find-file)
+  ("C-x C-f" . counsel-find-file)
+  ("<f1> f" . counsel-describe-function)
+  ("<f1> v" . counsel-describe-variable)
+  ("<f1> l" . counsel-find-library)
+  ("<f2> i" . counsel-info-lookup-symbol)
+  ("<f2> u" . counsel-unicode-char)
+  ("C-x l" . counsel-locate)
+  ("C-S-o" . counsel-rhythmbox)
+  ("C-r" . counsel-expression-history)
+  ("C-c C-g" . counsel-mark-ring)
+  ("\C-xg" . counsel-bookmark)
+  ("M-g" . counsel-projectile)
+  )
 
-;; redo-undo tree
-(require 'undo-tree)
-(global-undo-tree-mode 1)
-;; (setq undo-tree-auto-save-history t)
-;; (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+
+(use-package projectile-mode
+  :commands projectile-mode
+  :init
+  (counsel-projectile-mode 1)
+  ;; using the local .projectile file for the file settings
+  (setq projectile-indexing-method 'native)
+  (setq projectile-enable-caching t)
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-mode-line-function '(lambda ()
+					 (format " P[%s]" (projectile-project-name))))
+  )
+
+
+
+;; (use-package company-mode
+;;   :bind (:map company-active-map
+;; 	      ("C-h". company-show-doc-buffer)
+;; 	      ("C-n". company-select-next)
+;; 	      ("C-p". company-select-previous)
+;; 	      )
+;;   :init
+  (setq company-selection-wrap-around t
+	company-tooltip-align-annotations t
+	company-idle-delay 0
+	company-minimum-prefix-length 2
+	company-tooltip-limit 9
+	company-show-numbers t)
+  (global-company-mode)
+  ;;(company-tng-configure-default)
+  (add-hook 'elpy-mode-hook
+            (lambda ()
+              (set (make-local-variable 'company-backends)
+                   (append company-backends '(company-yasnippet)))))
+  (add-hook 'inferior-python-mode-hook
+            (lambda ()
+              (set (make-local-variable 'company-backends)
+                   (append company-backends
+			   '(company-yasnippet company-other-backend)))))
+  ;; ;; (add-hook 'ess-mode-hook
+  ;; ;; 	  (lambda ()
+  ;; ;; 	    (set (make-local-variable 'company-backends)
+  ;; ;; 		 (append company-backends '(company-yasnippet company-dabbrev-code)))))
+  ;; (add-hook 'LaTeX-mode-hook
+  ;; 	    (lambda ()
+  ;; 	      (set (make-local-variable 'company-backends)
+  ;; 		   (list
+  ;; 		    (cons 'company-yasnippet
+  ;; 			  (car company-backends))))))
+  ;; (add-hook 'mhtml-mode-hook
+  ;;           (lambda ()
+  ;; 	      (set (make-local-variable 'company-backends)
+  ;; 		   (list
+  ;; 		    (cons 'company-yasnippet
+  ;; 			  (car company-backends))))))
+;;  )
+
+;;(require 'company-tabnine)
+;;(add-to-list 'company-backends #'company-tabnine)
+
+
+(use-package ace-window
+  :init
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  (defvar aw-dispatch-alist
+    '((?x aw-delete-window "Delete Window")
+      (?m aw-swap-window "Swap Windows")
+      (?M aw-move-window "Move Window")
+      (?j aw-switch-buffer-in-window "Select Buffer")
+      (?n aw-flip-window)
+      (?u aw-switch-buffer-other-window "Switch Buffer Other Window")
+      (?c aw-split-window-fair "Split Fair Window")
+      (?v aw-split-window-vert "Split Vert Window")
+      (?b aw-split-window-horz "Split Horz Window")
+      (?o delete-other-windows "Delete Other Windows")
+      (?? aw-show-dispatch-help))
+    "List of actions for `aw-dispatch-default'.")
+  :bind
+  ("M-o" . ace-window)
+  ("M-0" . delete-window)
+  ("M-1" . delete-other-windows)
+  ("M-2" . split-window-below)
+  ("M-3" . split-window-right)
+  ("M-k" . kill-this-buffer)
+  ("<f10>" . toggle-frame-maximized)
+  ("M-\\" . nil)
+  )
+
+
+(use-package expand-region
+  :bind
+  ("C-=" . er/expand-region)
+  ("C--" . er/contract-region))
+
+
+(use-package yasnippet
+  :init
+  (yas-global-mode 1)
+  )
+
+
+;; (use-package hungry-delete
+;;   :init
+;;   (global-hungry-delete-mode))
+
+
+(use-package autopair
+  :init (autopair-global-mode 1))
+
+
+(use-package undo-tree
+  :init 
+  (global-undo-tree-mode 1)
+  )
+
+
+(use-package youdao-dictionary
+  :init
+  (global-set-key (kbd "M-y") 'youdao-dictionary-search-at-point))
+
+
+(use-package iedit)
+
+
+(use-package avy
+  :init
+  (defun mydef-avy-goto-char ()
+    "let avy-goto-char go to the below of the searching charachter"
+    (interactive)
+    (call-interactively 'avy-goto-char)
+    (forward-char))
+  (global-set-key [(control ?\;)] 'avy-goto-char)
+  :bind
+  ("C-'" . avy-goto-line)
+  ;; ([(control ?\;)] . avy-goto-char)
+  )
 
 
 ;; auto jump to the pop window
@@ -164,17 +255,9 @@
 (popwin-mode t)
 
 
-;; save history
-;;(savehist-mode 1)
-;;(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-;;(setq savehist-file "~/.emacs.d/tmp/savehist")
-
 (require 'yasnippet)
 (yas-global-mode 1)
 
-
-;; highlight selected words in the whole buffer
-(require 'iedit)
 
 
 ;; evil-mode
@@ -189,16 +272,6 @@
 (add-hook 'comint-exec-hook 
 	  (lambda () (set-process-query-on-exit-flag (get-buffer-process (current-buffer)) nil)))
 
-;; calendar of china
-(require 'cal-china-x)
-(setq mark-holidays-in-calendar t)
-(setq cal-china-x-important-holidays cal-china-x-chinese-holidays)
-(setq cal-china-x-general-holidays '((holiday-lunar 1 15 "元宵节")))
-(setq other-holidays '((holiday-lunar 12 27 "Lisa's Birthday")))
-(setq calendar-holidays
-      (append cal-china-x-important-holidays
-	      cal-china-x-general-holidays
-	      other-holidays))
 
 (use-package markdown-mode
   :ensure t
@@ -208,5 +281,12 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-(provide 'init-packages)
 
+;; (custom-set-variables
+;;  '(ispell-program-name "c:/cygwin64/bin/aspell.exe"))
+;;(setq exec-path (cons "c:/cygwin64/bin/" exec-path))
+;;(setq-default ispell-program-name "aspell")
+
+
+
+(provide 'init-packages)

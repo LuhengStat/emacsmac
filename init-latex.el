@@ -1,26 +1,58 @@
-
-;;(require 'auto-complete-auctex)
 (require 'company-auctex)
+(setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin/"))
+(setq exec-path (append exec-path '("/Library/TeX/texbin/")))
+(setq exec-path (append exec-path '("/usr/local/bin/")))
 (company-auctex-init)
-(load "~/.emacs.d/myini/cdlatex.el")
-(add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
 
-;; ACUTeX replaces latex-mode-hook with LaTeX-mode-hook
+;; for the \left \right part 
+(add-hook 'latex-mode-hook
+          (lambda ()
+	    (autopair-mode -1)))
 (add-hook 'LaTeX-mode-hook
-(lambda ()
-(setq TeX-auto-save t)
-(setq TeX-parse-self t)
-(setq-default TeX-master nil)
-(reftex-mode t)
-(TeX-fold-mode t)))
+          (lambda ()
+	    (autopair-mode -1)))
+(setq-default LaTeX-electric-left-right-brace t)
 
-;; do not promot for the reference <2018-01-23 Tue> 
-;;(setq reftex-ref-macro-prompt nil)
-(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+;; two dollars in one time
+(defun brf-TeX-Inserting (sta stb stc num)
+  " after entering stb insert stc and go back with the cursor by num positions.
+    With prefix nothings gets replaced. If the previous char was sta nothing will be 
+    replaces as well." 
+  (if (null current-prefix-arg)
+      (progn
+        (if (= (preceding-char) sta )
+            (insert stb)
+          (progn (insert stc) (backward-char num))))
+    (insert stb)))
+
+(defun brf-TeX-dollarm () (interactive) (brf-TeX-Inserting ?\\ "$"  "$$" 1))
+(add-hook 'LaTeX-mode-hook
+   (function (lambda ()
+	       (local-set-key (kbd "$") 'brf-TeX-dollarm))))
+
+;; Only change sectioning colour
+;;(setq font-latex-fontify-sectioning 'color)
+
+;; super-/sub-script on baseline
+(setq font-latex-script-display (quote (nil)))
+;; Do not change super-/sub-script font
+(custom-set-faces
+ '(font-latex-subscript-face ((t nil)))
+ '(font-latex-superscript-face ((t nil)))
+ )
+
+;; Exclude bold/italic from keywords, can be customized
+;;(setq font-latex-deactivated-keyword-classes
+;;      '("italic-command" "bold-command" "italic-declaration" "bold-declaration"))
 
 (setq-default TeX-parse-self t) ;; Enable parsing of the file itself on load
 (setq-default TeX-auto-save t) ;; Enable save on command executation (e.g., LaTeX)
 (setq-default TeX-save-query nil) ;; Don't even ask about it
+
+;; latex options
+(setq-default TeX-command-extra-options "-shell-escape") ;; Enable shell escape option by default
+
+;; Synctex for windows
 (setq-default TeX-source-correlate-mode t) ;; Enable synctex
 (setq-default TeX-source-correlate-start-server t)
 
@@ -28,14 +60,51 @@
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 ;; Activate nice interface between RefTeX and AUCTeX
 (setq reftex-plug-into-AUCTeX t)
+;; set a cite type
+;;(setq reftex-cite-format 'natbib)
+ 	
+(setq-default TeX-master nil) ; Query for master file.
+;; do not promot for the reference <2018-01-23 Tue> 
+(setq reftex-ref-macro-prompt nil)
+
+(setq font-latex-match-reference-keywords
+  '(
+    ("citeauthor" "[{")
+    ("Citeauthor" "[{")
+    ("cians" "[{")
+    ("citet" "[{")
+    ("citep" "[{")
+    ))
+
+;; AucTeX
+(add-hook 'LaTeX-mode-hook 'visual-line-mode)
+;;(add-hook 'LaTeX-mode-hook (lambda () (setq truncate-lines t)))
+(setq ispell-program-name "/usr/local/bin/aspell")
+;;(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+;;(require 'flyspell-correct-ivy)
+;;(require 'flyspell-correct-popup)
+;;(define-key flyspell-mode-map (kbd "C-c <tab>") 'flyspell-correct-previous-word-generic)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(setq reftex-plug-into-AUCTeX t)
+(setq TeX-PDF-mode t)
+
 
 ;; use Skim as default pdf viewer
 ;; Skim's displayline is used for forward search (from .tex to .pdf)
 ;; option -b highlights the current line; option -g opens Skim in the background  
-(setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+(cond
+ ((string-equal system-type "windows-nt") ; Microsoft Windows
+  (progn (setq TeX-view-program-selection '((output-pdf "SumatraPDF")))))
+ ((string-equal system-type "darwin") ; Mac OS X
+  (progn (setq TeX-view-program-selection '((output-pdf "Skim")))))
+ ((string-equal system-type "gnu/linux") ; linux
+  (progn (message "Linux"))))
 (setq TeX-view-program-list
-      '(("PDF Viewer"
-	 "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b")))
+      '(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline -b %n %o %b")
+	("SumatraPDF"
+         ("\"c:/Program Files/SumatraPDF32/SumatraPDF.exe\" -reuse-instance" 
+          (mode-io-correlate " -forward-search \"%b\" %n ") " %o"))
+	))
 
 ;; set the face of the toc 
 (defface mydef-reftex-section-heading-face
@@ -75,6 +144,9 @@
 	    (define-key LaTeX-mode-map (kbd "C-c 0") 'LaTeX-close-environment)
 	    (define-key LaTeX-mode-map (kbd "C-c 9") 'reftex-label)
 	    (define-key LaTeX-mode-map (kbd "C-c ]") 'reftex-reference)
+	    (define-key LaTeX-mode-map (kbd "C-c ]") 'reftex-reference)
+	    (define-key LaTeX-mode-map (kbd "M-\\") 'LaTeX-fill-region-as-para-do)
+	    (define-key LaTeX-mode-map (kbd "<S-s-mouse-1>") 'TeX-view)
 	    (turn-on-auto-fill)
 	    ))
 (add-hook 'reftex-mode-hook
@@ -112,5 +184,5 @@ true or not"
 	    (define-key reftex-mode-map (kbd "C-c -") 'mydef-reftex-toc-recenter)
 	    ))
 
-(provide 'init-latex)
 
+(provide 'init-latex)
