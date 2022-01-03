@@ -33,5 +33,6 @@
  '(font-latex-superscript-face ((t nil)))
  '(font-latex-warning-face ((t (:foreground "red"))))
  '(iedit-occurrence ((t (:inherit nil :background "medium slate blue"))))
- '(org-agenda-clocking ((t (:background "SkyBlue1")))))
+ '(org-agenda-clocking ((t (:background "SkyBlue1"))))
+ '(region ((t (:extend t :background "SkyBlue1" :distant-foreground "ns_selection_fg_color")))))
 
